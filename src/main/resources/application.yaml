@@ -1,0 +1,50 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+
+  cors:
+    url:
+      - localhost:3000,
+      - http://localhost:3000,
+      - https://localhost:3000
+
+  cloud:
+    discovery:
+      client:
+        simple:
+          instances:
+            api-kleber:
+#              - uri: http://localhost:8082
+              - uri: http://localhost:8083
+
+    compatibility-verifier:
+      enabled: false
+    gateway:
+      routes:
+        - id: login
+          uri: http://localhost:8081
+          predicates:
+            - Path=/fatec/login/**
+
+        - id: api-kleber
+          uri: lb://api-kleber
+          predicates:
+            - Path=/fatec/kleber/**
+          filters:
+            - name: Retry
+              args:
+                  retries: 3
+                  statuses: BAD_GATEWAY, SERVICE_UNAVAILABLE, NOT_FOUND
+                  methods: GET, POST
+                  backoff:
+                    firstBackoff: 10ms
+                    maxBackoff: 50ms
+                    factor: 2
+                    basedOnPreviousValue: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
