@@ -16,7 +16,7 @@ spring:
       client:
         simple:
           instances:
-            api-kleber:
+            api-ana:
 #              - uri: http://localhost:8082
               - uri: http://localhost:8083
 
@@ -27,12 +27,12 @@ spring:
         - id: login
           uri: http://localhost:8081
           predicates:
-            - Path=/fatec/login/**
+            - Path=/login/**
 
-        - id: api-kleber
-          uri: lb://api-kleber
+        - id: api-ana
+          uri: lb://api-ana
           predicates:
-            - Path=/fatec/kleber/**
+            - Path=/fatec/ana/**
           filters:
             - name: Retry
               args:
