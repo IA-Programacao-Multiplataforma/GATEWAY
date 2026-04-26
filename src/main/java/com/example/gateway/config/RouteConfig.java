@@ -8,6 +8,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+
 import reactor.core.publisher.Flux;
 
 @Configuration
@@ -18,10 +19,9 @@ public class RouteConfig {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
-                                .pathMatchers("/fatec/login/v1/auth/**")
-                                .permitAll()
-                                .pathMatchers("/fatec/kleber/v1/teste/**").authenticated()
-                                .pathMatchers("/fatec/kleber/v1/admin/**").hasRole("ADMIN")
+                                .pathMatchers("/login/**").permitAll()
+                                .pathMatchers("/usuarios/**").permitAll()
+                                .pathMatchers("/autenticacao/**").permitAll()
                                 .anyExchange().authenticated()
                 ).oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
                 .build();

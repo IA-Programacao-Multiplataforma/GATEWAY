@@ -17,22 +17,27 @@ spring:
         simple:
           instances:
             api-ana:
-#              - uri: http://localhost:8082
-              - uri: http://localhost:8083
+              - uri: http://localhost:8084
 
     compatibility-verifier:
       enabled: false
     gateway:
       routes:
-        - id: login
+        - id: login-service
           uri: http://localhost:8081
           predicates:
-            - Path=/login/**
+            - Path=/login/**, /usuarios/**, /autenticacao/**
 
-        - id: api-ana
-          uri: lb://api-ana
+        - id: cliente
+          uri: http://localhost:8082
           predicates:
-            - Path=/fatec/ana/**
+            - Path=/clientes/**
+
+        - id: produto
+          uri: http://localhost:8083
+          predicates:
+            - Path=/produtos/**
+
           filters:
             - name: Retry
               args:
